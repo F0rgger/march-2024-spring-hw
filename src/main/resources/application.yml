@@ -1,0 +1,7 @@
+spring:
+  application:
+    name:march-2024-spring
+
+
+  profiles:
+    active: store1
