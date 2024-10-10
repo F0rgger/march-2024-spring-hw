@@ -1,47 +1,42 @@
 package org.example.march2024springhw.properties.conntrollers;
 
 import lombok.RequiredArgsConstructor;
-import org.example.march2024springhw.properties.Fuel;
-import org.example.march2024springhw.properties.ReferenceDataProperties;
+import org.example.march2024springhw.properties.config.FuelTypesConfig;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.Map;
 
 @RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
-@RequestMapping("/asd")
 public class ReferenceDataController {
-    //    @Value("${reference-data.engineTypes}")
-//    private List<String> engines;
-    private final ReferenceDataProperties referenceDataProperties;
+
+    @Value("${engine-types.types}")
+    private final List<String> engineTypes;
+    private final FuelTypesConfig fuelTypesConfig;
 
     @GetMapping("/engine-types")
-    public ResponseEntity<List<String>> getEngineTypes() {
-        return ResponseEntity.ok(referenceDataProperties.getEngineTypes());
+    public List<String> getEngineTypes() {
+        return engineTypes;
     }
 
     @GetMapping("/fuel-types")
-    public ResponseEntity<List<Fuel>> getFuelTypes() {
-        return ResponseEntity.ok(referenceDataProperties.getFuels());
+    public Map<String, List<String>> getFuelTypes() {
+        return fuelTypesConfig.getFuelTypes();
     }
 
-    @GetMapping("/fuel-types/{name}")
-    public ResponseEntity<Fuel> getFuelType(@PathVariable String name) {
-        Optional<Fuel> result = Optional
-                .ofNullable(referenceDataProperties)
-                .map(ReferenceDataProperties::getFuels)
-                .stream()
-                .flatMap(Collection::stream)
-                .filter(fuel -> Objects.equals(fuel.getName(), name))
-                .findFirst();
-        return ResponseEntity.of(result);
+    @GetMapping("/fuel-types/{fuelName}")
+    public ResponseEntity<Map<String, List<String>>> getFuelType(@PathVariable String fuelName) {
+        Map<String, List<String>> fuelTypes = fuelTypesConfig.getFuelTypes();
+        if (fuelTypes.containsKey(fuelName)) {
+            return ResponseEntity.ok(Collections.singletonMap(fuelName, fuelTypes.get(fuelName)));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 }
