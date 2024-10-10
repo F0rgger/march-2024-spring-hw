@@ -2,6 +2,9 @@ package org.example.march2024springhw.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "car")
@@ -20,4 +23,7 @@ public class Car {
 
     @Column(nullable = false)
     private int torque;
+
+    @Column(name = "fuel_type", nullable = false)
+    private String fuelType;
 }
