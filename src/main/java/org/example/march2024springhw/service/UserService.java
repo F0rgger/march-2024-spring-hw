@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class OwnerService {
+public class UserService {
 
     @Autowired
     private OwnerRepository ownerRepository;

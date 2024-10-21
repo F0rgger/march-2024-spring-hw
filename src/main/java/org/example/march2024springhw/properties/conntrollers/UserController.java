@@ -1,7 +1,7 @@
 package org.example.march2024springhw.properties.conntrollers;
 
 import org.example.march2024springhw.entity.User;
-import org.example.march2024springhw.service.OwnerService;
+import org.example.march2024springhw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,10 +9,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/owners")
-public class OwnerController {
+public class UserController {
 
     @Autowired
-    private OwnerService ownerService;
+    private UserService ownerService;
 
     @GetMapping
     public List<User> getAllOwners() {
